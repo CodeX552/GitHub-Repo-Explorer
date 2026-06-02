@@ -1,38 +1,26 @@
 import { useState } from "react";
+import { GoSearch } from "react-icons/go";
 
 const SearchBar = ({ onSearch }) => {
-  const [username, setUsername] =
-    useState("");
+  const [username, setUsername] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!username.trim()) return;
-
-    onSearch(username);
+    onSearch(username.trim());
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex justify-center gap-4 mb-8"
-    >
+    <form onSubmit={handleSubmit} className="flex-1 max-w-[480px] relative" id="search-form">
+      <GoSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" size={16} />
       <input
         type="text"
-        placeholder="Enter GitHub Username"
+        placeholder="Search GitHub username..."
         value={username}
-        onChange={(e) =>
-          setUsername(e.target.value)
-        }
-        className="px-4 py-2 rounded text-black w-75"
+        onChange={(e) => setUsername(e.target.value)}
+        id="search-input"
+        className="w-full py-2.5 pl-10 pr-4 border border-border rounded-full text-sm font-[inherit] bg-bg-secondary text-text-primary outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(124,58,237,0.1)] focus:bg-bg-primary placeholder:text-text-muted"
       />
-
-      <button
-        type="submit"
-        className="bg-blue-500 px-5 py-2 rounded"
-      >
-        Search
-      </button>
     </form>
   );
 };

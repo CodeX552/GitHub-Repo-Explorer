@@ -1,40 +1,25 @@
 import { RxCross2 } from "react-icons/rx";
 
-const RecentSearches = ({
-  searches,
-  onSelect,
-  onClear,
-}) => {
-  if (searches.length === 0) {
-    return null;
-  }
+const RecentSearches = ({ searches, onSelect, onClear }) => {
+  if (searches.length === 0) return null;
 
   return (
-    <div className="max-w-6xl mx-auto mb-8">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-gray-400">
-          Recent:
-        </p>
+    <div className="flex items-center gap-2 px-8 py-2 bg-bg-primary border-b border-border overflow-x-auto max-md:px-4" id="recent-searches">
+      <span className="text-xs text-text-muted whitespace-nowrap">Recent:</span>
 
+      {searches.map((item, index) => (
         <button
-          onClick={onClear}
-          className="text-black-400 hover:text-red-500 transition"
+          key={index}
+          onClick={() => onSelect(item)}
+          className="px-3 py-1 border border-border rounded-full text-xs font-medium font-[inherit] text-text-secondary bg-bg-secondary cursor-pointer transition-all duration-200 whitespace-nowrap hover:border-accent hover:text-accent hover:bg-accent-light"
         >
-          <RxCross2 size={20} />
+          {item}
         </button>
-      </div>
+      ))}
 
-      <div className="flex flex-wrap gap-3">
-        {searches.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => onSelect(item)}
-            className="border border-gray-500 px-4 py-1 rounded-full hover:bg-slate-700 transition"
-          >
-            {item}
-          </button>
-        ))}
-      </div>
+      <button onClick={onClear} className="ml-auto bg-none border-none cursor-pointer text-text-muted p-1 rounded flex items-center transition-colors duration-200 hover:text-red-600" aria-label="Clear recent searches">
+        <RxCross2 size={16} />
+      </button>
     </div>
   );
 };
