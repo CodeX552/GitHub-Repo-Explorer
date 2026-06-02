@@ -48,6 +48,8 @@ const Home = () => {
         setLoadingMore(true);
       } else {
         setLoading(true);
+        setUser(null);
+        setRepos([]);
       }
       setError("");
 
@@ -121,7 +123,9 @@ const Home = () => {
           }}
         />
 
-        <ThemeToggle />
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
       </nav>
 
       <RecentSearches

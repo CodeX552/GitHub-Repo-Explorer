@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoSearch } from "react-icons/go";
 
 const SearchBar = ({ onSearch }) => {
@@ -9,6 +9,17 @@ const SearchBar = ({ onSearch }) => {
     if (!username.trim()) return;
     onSearch(username.trim());
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (username.trim()) {
+        onSearch(username.trim());
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username]);
 
   return (
     <form onSubmit={handleSubmit} className="flex-1 max-w-[480px] relative" id="search-form">

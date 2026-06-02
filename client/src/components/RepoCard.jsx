@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { GoStar, GoRepoForked, GoLinkExternal } from "react-icons/go";
 import { getLanguageColor } from "./LanguagesCard";
 
 const RepoCard = ({ repo }) => {
+  const [expanded, setExpanded] = useState(false);
   const timeAgo = (dateStr) => {
     const now = new Date();
     const date = new Date(dateStr);
@@ -20,14 +22,18 @@ const RepoCard = ({ repo }) => {
   };
 
   return (
-    <div className="group bg-bg-primary border border-border rounded-xl px-6 py-5 mb-3 transition-all duration-200 relative hover:border-accent hover:shadow-md hover:-translate-y-px" id={`repo-${repo.id}`}>
+    <div 
+      className="group bg-bg-primary border border-border rounded-xl px-6 py-5 mb-3 transition-all duration-200 relative cursor-pointer hover:border-accent hover:shadow-md hover:-translate-y-px" 
+      onClick={() => setExpanded(!expanded)}
+      id={`repo-${repo.id}`}
+    >
       <div className="flex items-start justify-between mb-1.5">
         <div className="flex-1">
           <a
             href={repo.html_url}
             target="_blank"
-            rel="noopener noreferrer"
             className="text-[15px] font-semibold text-text-primary no-underline break-words hover:text-accent"
+            onClick={(e) => e.stopPropagation()}
           >
             {repo.name}
           </a>
@@ -45,6 +51,7 @@ const RepoCard = ({ repo }) => {
           rel="noopener noreferrer"
           className="text-text-muted shrink-0 ml-3 transition-colors duration-200 group-hover:text-accent"
           aria-label="Open repository"
+          onClick={(e) => e.stopPropagation()}
         >
           <GoLinkExternal size={16} />
         </a>
@@ -91,6 +98,20 @@ const RepoCard = ({ repo }) => {
 
         <span className="ml-auto text-xs text-text-muted">{timeAgo(repo.updated_at)}</span>
       </div>
+
+      {expanded && (
+        <div 
+          className="mt-4 pt-4 border-t border-border cursor-default" 
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="grid grid-cols-2 gap-4 text-sm text-text-secondary max-md:grid-cols-1">
+            <div><strong className="text-text-primary font-medium">Default Branch:</strong> {repo.default_branch}</div>
+            <div><strong className="text-text-primary font-medium">Open Issues:</strong> {repo.open_issues_count}</div>
+            {repo.license && <div><strong className="text-text-primary font-medium">License:</strong> {repo.license.name}</div>}
+            <div><strong className="text-text-primary font-medium">Size:</strong> {(repo.size / 1024).toFixed(2)} MB</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
