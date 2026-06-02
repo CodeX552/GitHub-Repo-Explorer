@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import API from "../api/githubApi";
 
@@ -9,6 +9,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
 import SortDropdown from "../components/SortDropdown";
 import LoadMoreButton from "../components/LoadMoreButton";
+import RecentSearches from "../components/RecentSearches";
 
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -30,6 +31,43 @@ const Home = () => {
     currentUsername,
     setCurrentUsername,
   ] = useState("");
+
+  const [
+    recentSearches,
+    setRecentSearches,
+  ] = useState([]);
+
+  useEffect(() => {
+    const savedSearches =
+      JSON.parse(
+        localStorage.getItem(
+          "recentSearches"
+        )
+      ) || [];
+
+    setRecentSearches(savedSearches);
+  }, []);
+
+  const saveRecentSearch = (
+    username
+  ) => {
+    let updatedSearches = [
+      username,
+      ...recentSearches.filter(
+        (item) => item !== username
+      ),
+    ];
+
+    updatedSearches =
+      updatedSearches.slice(0, 5);
+
+    setRecentSearches(updatedSearches);
+
+    localStorage.setItem(
+      "recentSearches",
+      JSON.stringify(updatedSearches)
+    );
+  };
 
   const fetchGithubUser = async (
     username,
@@ -56,6 +94,8 @@ const Home = () => {
       }
 
       setCurrentUsername(username);
+
+      saveRecentSearch(username);
     } catch (error) {
       setError(
         error.response?.data?.message ||
@@ -65,6 +105,14 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  const clearRecentSearches = () => {
+  localStorage.removeItem(
+    "recentSearches"
+  );
+
+  setRecentSearches([]);
+};
 
   const handleLoadMore = () => {
     const nextPage = page + 1;
@@ -116,6 +164,16 @@ const Home = () => {
           fetchGithubUser(username, 1);
         }}
       />
+
+      <RecentSearches
+  searches={recentSearches}
+  onSelect={(username) => {
+    setPage(1);
+
+    fetchGithubUser(username, 1);
+  }}
+  onClear={clearRecentSearches}
+/>
 
       {loading && <LoadingSpinner />}
 
