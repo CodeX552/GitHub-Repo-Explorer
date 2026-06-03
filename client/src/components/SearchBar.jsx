@@ -1,24 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GoSearch } from "react-icons/go";
 
 const SearchBar = ({ onSearch }) => {
   const [username, setUsername] = useState("");
+  const timerRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     if (!username.trim()) return;
     onSearch(username.trim());
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       if (username.trim()) {
         onSearch(username.trim());
       }
-    }, 600);
+    }, 700);
 
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [username]);
 
   return (

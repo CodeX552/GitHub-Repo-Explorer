@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GoStar, GoRepoForked, GoLinkExternal } from "react-icons/go";
+import { GoLinkExternal, GoChevronDown } from "react-icons/go";
 import { getLanguageColor } from "./LanguagesCard";
 
 const RepoCard = ({ repo }) => {
@@ -45,16 +45,22 @@ const RepoCard = ({ repo }) => {
           )}
         </div>
 
-        <a
-          href={repo.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-text-muted shrink-0 ml-3 transition-colors duration-200 group-hover:text-accent"
-          aria-label="Open repository"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <GoLinkExternal size={16} />
-        </a>
+        <div className="flex items-center gap-3 shrink-0 ml-3">
+          <a
+            href={repo.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-muted transition-colors duration-200 hover:text-accent"
+            aria-label="Open repository"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <GoLinkExternal size={16} />
+          </a>
+          <GoChevronDown 
+            size={18} 
+            className={`text-text-muted transition-transform duration-300 ${expanded ? "rotate-180" : ""}`} 
+          />
+        </div>
       </div>
 
       {repo.description && (
@@ -82,36 +88,40 @@ const RepoCard = ({ repo }) => {
           </span>
         )}
 
-        {repo.stargazers_count > 0 && (
-          <span className="flex items-center gap-1.5">
-            <GoStar size={14} />
-            {repo.stargazers_count}
-          </span>
-        )}
-
-        {repo.forks_count > 0 && (
-          <span className="flex items-center gap-1.5">
-            <GoRepoForked size={14} />
-            {repo.forks_count}
-          </span>
-        )}
-
         <span className="ml-auto text-xs text-text-muted">{timeAgo(repo.updated_at)}</span>
       </div>
 
-      {expanded && (
-        <div 
-          className="mt-4 pt-4 border-t border-border cursor-default" 
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="grid grid-cols-2 gap-4 text-sm text-text-secondary max-md:grid-cols-1">
-            <div><strong className="text-text-primary font-medium">Default Branch:</strong> {repo.default_branch}</div>
-            <div><strong className="text-text-primary font-medium">Open Issues:</strong> {repo.open_issues_count}</div>
-            {repo.license && <div><strong className="text-text-primary font-medium">License:</strong> {repo.license.name}</div>}
-            <div><strong className="text-text-primary font-medium">Size:</strong> {(repo.size / 1024).toFixed(2)} MB</div>
+      <div 
+        className={`grid transition-all duration-300 ease-in-out ${expanded ? "grid-rows-[1fr] opacity-100 mt-4" : "grid-rows-[0fr] opacity-0 mt-0"}`}
+      >
+        <div className="overflow-hidden">
+          <div 
+            className="bg-bg-secondary p-4 rounded-xl border border-border cursor-default" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm text-text-secondary max-md:grid-cols-1">
+              <div className="flex items-center gap-2">
+                 <span className="text-text-primary font-medium">Stars:</span> {repo.stargazers_count}
+              </div>
+              <div className="flex items-center gap-2">
+                 <span className="text-text-primary font-medium">Forks:</span> {repo.forks_count}
+              </div>
+              <div className="flex items-center gap-2">
+                 <span className="text-text-primary font-medium">Open Issues:</span> {repo.open_issues_count}
+              </div>
+              <div className="flex items-center gap-2">
+                 <span className="text-text-primary font-medium">Default Branch:</span> {repo.default_branch}
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-text-primary font-medium">Watchers:</span> {repo.watchers_count}
+              </div>
+              <div className="flex items-center gap-2">
+                 <span className="text-text-primary font-medium">Size:</span> {(repo.size / 1024).toFixed(2)} MB
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

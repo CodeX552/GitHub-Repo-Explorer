@@ -177,10 +177,9 @@ const Home = () => {
             </div>
 
             {sortedRepos.length > 0 && (
-              <>
-                <RepoList repos={sortedRepos} />
-                <LoadMoreButton onLoadMore={handleLoadMore} loading={loadingMore} />
-              </>
+             <> 
+             <RepoList repos={sortedRepos} /> {sortedRepos.length < user.public_repos && ( <LoadMoreButton onLoadMore={handleLoadMore} loading={loadingMore} /> )} 
+             </>
             )}
           </main>
         </div>
