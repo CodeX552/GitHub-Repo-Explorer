@@ -29,7 +29,7 @@ const SearchBar = ({ onSearch }) => {
   }, [username]);
 
   return (
-    <form onSubmit={handleSubmit} className="flex-1 max-w-[480px] relative" id="search-form">
+    <form autoComplete="off" onSubmit={handleSubmit} className="flex-1 max-w-[480px] relative" id="search-form">
       <GoSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" size={16} />
       <input
         type="text"

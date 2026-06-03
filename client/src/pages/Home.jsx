@@ -116,7 +116,7 @@ const Home = () => {
           RepoExplorer
         </a>
 
-        <SearchBar
+        <SearchBar 
           onSearch={(username) => {
             setPage(1);
             fetchGithubUser(username, 1);
